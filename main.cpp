@@ -6,7 +6,7 @@
 #include <fstream>
 #include "registro.h"
 
-#define TAM 1000
+#define TAM 10
 
 using namespace std;
 
@@ -32,90 +32,67 @@ void leitura(vector<registro>& lista, vector<string>& linha, vector<vector<strin
         bgg.clear();
         bgg.seekg(0, ios::beg);
 
-        getline(bgg,str);
+        getline(bgg,str); // pula cabeçalho
         srand(time(NULL));//inicializando semente de randomizacao
-        int random = 17065-TAM;
-        random = rand() % random;
+        int random = 17065-TAM; //pegando TAM linhas dentre as 17065 primeiras linhas do arquivo
+        random = rand() % random; //sorteia numero aleatorio
         int contN = 0;
-	bgg.seekg(random, ios::beg);
-	getline(file,str);
-        while(getline(file, str)){
-	    stringstream s(str);
-            registro reg;
-            getline(s, palavra, ',');
-	    reg.setId(stoi(palavra));
-            getline(s, palavra, ',');
-            reg.setUser(palavra);
-            getline(s, palavra, ',');
-            if(palavra>="0.0" && palavra<="10.0"){
+	//seta o ponteiro do arquivo na linha sorteada
+	cout<<random<<endl;
+        for(int j = 0; j< random; j++){
+	    getline(bgg,str);
+	}
+	while(getline(bgg, str)){
+	    stringstream s(str);//joga a string str para uma stringstream
+            registro reg; //cria um registro
+            getline(s, palavra, ','); //pega a primeira coluna => id
+	    reg.setId(stoi(palavra)); //define id como o numero lido do arquivo
+            getline(s, palavra, ','); //pega a segunda coluna => user
+            reg.setUser(palavra); //define o user como oo lido do arquivo
+            getline(s, palavra, ','); //pega a proxima coluna => rating
+            if(palavra>="0.0" && palavra<="10.0"){ //se o valor lido for um rating armazena-lo no registro
            	reg.setRating(stoi(palavra));
-           	lista.push_back(reg);
+           	lista.push_back(reg); // jogar o registro para dentro do vetor passado por parametro da funcao
             }
-            else
+            else //se nao, desconsidera a linha
                contN--;
             contN++;
             s.clear();
-	    if(contN<TAM)
+	    if(contN>=TAM)
 	    	break;
         }
+	cout<<contN<<endl;
     }
     else
 	cout<<"Erro ao abrir arquivo bgg-13m-reviews.csv"<<endl;
 
     cout<<"abrindo games_detailed_info.csv"<<endl;
     if(file.is_open()){
-	//linhas eh uma matrix que armazena todas as linhas e colunas
-
-        int num = 17065;//numero de linhas no arquivo
-        string str, palavra; //str eh usada para armazenar uma linha e palavra cada uma das colunas de str
-        //conta a quantidade de linhas no arquivo(inutil, foi so pra rodar 1 vez)
-	char separador = ',';
-        //delimitador 2 e 3 antes ou depois da , indicam uma coluna
-        char delimitador1 = ',';
-        char delimitador2 = '"';
-
+	string str;
+    	vector<registro>::iterator it;
+	int cont = 0;
+	file.seekg(0,ios::beg);//joga o ponteiro pro inicio do arquivo
+	getline(file, str); // pula o cabecalho
 	int i = 0;
-	cout<<"while eof"<<endl;
-	while(!file.eof()){
-	    getline(file, str); //le cada linha
-	    stringstream s(str); //coloca a linha lida em uma stringstream
-	    //lista eh um vetor que vai armazenar a linha completa
-	    bool flag = 0;
-	    cout<<"getline(s,str)"<<endl;
-	    while(getline(s, str)){
-	    	int inicio = 0;
-		for(i = 0; i <str.length(); i++){
-		    if(str[i] == separador){
-		    	linha.push_back(str.substr(inicio, i-inicio));
-			inicio = i+1;
-		    }
-		    else  if(str[i] == delimitador1 || str[i] == delimitador2){
-		    	for(i = i++; i<=str.length(); i++){
-			    if(i==str.length()){
-			    	flag = 1;
-				linha.push_back(str.substr(inicio, (i-1)-inicio));
-				break;
-			    }
-			    if((str[i] == delimitador2 || str[i]== delimitador1)&& str[i+1] == separador){
-			    	linha.push_back(str.substr(inicio, i-inicio+1));
-				i++;
-				inicio = i+1;
-			    }
-			}
-			if(i>str.length())
-			    break;
-		    }
-		}
-
-		if(i - inicio != 0 && flag == false){
-		    linha.push_back(str.substr(inicio, (i-1)-inicio));
-		}
-
-	    }
-	    cout<<"final-getline(s,str)"<<endl;
-    	    linhas.push_back(linha);
-	 }
-	cout<<"final-!file.eof()"<<endl;	
+	//cout<<lista.size()<<endl;
+	for(it = lista.begin(); it != lista.end(); ++it){ //pega apenas as linhas pegas ao ler o bgg
+	   while(i<it->getId()){ //caminha ate a primeira linha que o lida pelo bgg
+	   	getline(file,str);
+		i++;
+	   }
+	   cout<<i<<endl; 
+	   stringstream s(str); //joga o str pro stringstream
+	   getline(s, str, ','); //pega a primeira linha => id
+	   cout<<str<<endl;
+	   i = stoi(str);
+	   getline(s, str, '"');
+	   cout<<str<<endl;
+	   getline(s, str, '"');//pega o comentario
+	   cout<<str<<endl;
+	   it->setDescricao(str);//joga pro registro
+	   cont++;
+	       	       
+       }
     }
     else
 	 cout<<"erro ao abrir o arquivo info"<<endl;
@@ -128,5 +105,11 @@ int main(){
     vector<string> linha;
     vector<vector<string>> linhas;
     leitura(lista,linha, linhas);
-    
+    vector<registro>::iterator it;
+    for(it = lista.begin(); it != lista.end(); ++it){
+	    cout<<"ID: "<<it->getId()<<endl;
+	    cout<<"User: "<<it->getUser()<<endl;
+	    cout<<"Rating: "<<it->getRating()<<endl;
+	    cout<<"Descricao: "<<it->getDescricao()<<endl;
+    }
 }
