@@ -75,12 +75,13 @@ void leitura(vector<registro>& lista, vector<string>& linha, vector<vector<strin
         char delimitador2 = '"';
 
 	int i = 0;
+	cout<<"while eof"<<endl;
 	while(!file.eof()){
 	    getline(file, str); //le cada linha
 	    stringstream s(str); //coloca a linha lida em uma stringstream
 	    //lista eh um vetor que vai armazenar a linha completa
 	    bool flag = 0;
-
+	    cout<<"getline(s,str)"<<endl;
 	    while(getline(s, str)){
 	    	int inicio = 0;
 		for(i = 0; i <str.length(); i++){
@@ -111,8 +112,10 @@ void leitura(vector<registro>& lista, vector<string>& linha, vector<vector<strin
 		}
 
 	    }
+	    cout<<"final-getline(s,str)"<<endl;
     	    linhas.push_back(linha);
-	 }	    
+	 }
+	cout<<"final-!file.eof()"<<endl;	
     }
     else
 	 cout<<"erro ao abrir o arquivo info"<<endl;
