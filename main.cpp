@@ -27,11 +27,10 @@ void leitura(vector<registro>& lista, vector<string>& linha, vector<vector<strin
     cout<<"abrindo bgg-13m-reviews.csv"<<endl;
     if(bgg.is_open()){
         int num = 0;//numero de linhas no arquivo
-        string str,palavra;
+        string aux,str,palavra;
         //reinicializando o arquivo
         bgg.clear();
         bgg.seekg(0, ios::beg);
-
         getline(bgg,str); // pula cabeçalho
         srand(time(NULL));//inicializando semente de randomizacao
         int random = 17065-TAM; //pegando TAM linhas dentre as 17065 primeiras linhas do arquivo
@@ -49,6 +48,11 @@ void leitura(vector<registro>& lista, vector<string>& linha, vector<vector<strin
 	    reg.setId(stoi(palavra)); //define id como o numero lido do arquivo
             getline(s, palavra, ','); //pega a segunda coluna => user
             reg.setUser(palavra); //define o user como oo lido do arquivo
+	    if(palavra[0] == '"'){
+		getline(s, aux, '"');
+		palavra = palavra+aux;
+		getline(s, aux, ',');
+	    }
             getline(s, palavra, ','); //pega a proxima coluna => rating
             if(palavra>="0.0" && palavra<="10.0"){ //se o valor lido for um rating armazena-lo no registro
            	reg.setRating(stoi(palavra));
