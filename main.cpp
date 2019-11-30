@@ -6,7 +6,7 @@
 #include <fstream>
 #include "registro.h"
 
-#define TAM 10
+#define TAM 10000
 
 using namespace std;
 
@@ -80,15 +80,15 @@ void leitura(vector<registro>& lista, vector<string>& linha, vector<vector<strin
 	   	getline(file,str);
 		i++;
 	   }
-	   cout<<i<<endl; 
+	   //cout<<i<<endl; 
 	   stringstream s(str); //joga o str pro stringstream
 	   getline(s, str, ','); //pega a primeira linha => id
-	   cout<<str<<endl;
-	   i = stoi(str);
+	   //cout<<str<<endl;
+	   //i = stoi(str);
 	   getline(s, str, '"');
-	   cout<<str<<endl;
+	   //cout<<str<<endl;
 	   getline(s, str, '"');//pega o comentario
-	   cout<<str<<endl;
+	   //cout<<str<<endl;
 	   it->setDescricao(str);//joga pro registro
 	   cont++;
 	       	       
