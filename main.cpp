@@ -54,12 +54,8 @@ void leitura(vector<registro>& lista, vector<string>& linha, vector<vector<strin
 		getline(s, aux, ',');
 	    }
             getline(s, palavra, ','); //pega a proxima coluna => rating
-            if(palavra>="0.0" && palavra<="10.0"){ //se o valor lido for um rating armazena-lo no registro
-           	reg.setRating(stoi(palavra));
-           	lista.push_back(reg); // jogar o registro para dentro do vetor passado por parametro da funcao
-            }
-            else //se nao, desconsidera a linha
-               contN--;
+            reg.setRating(stoi(palavra));
+            lista.push_back(reg); // jogar o registro para dentro do vetor passado por parametro da funcao
             contN++;
             s.clear();
 	    if(contN>=TAM)
