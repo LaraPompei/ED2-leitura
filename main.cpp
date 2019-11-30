@@ -38,7 +38,7 @@ void leitura(vector<registro>& lista, vector<string>& linha, vector<vector<strin
         random = rand() % random; //sorteia numero aleatorio
         int contN = 0;
 	//seta o ponteiro do arquivo na linha sorteada
-	cout<<random<<endl;
+	//cout<<random<<endl;
         for(int j = 0; j< random; j++){
 	    getline(bgg,str);
 	}
@@ -61,7 +61,7 @@ void leitura(vector<registro>& lista, vector<string>& linha, vector<vector<strin
 	    if(contN>=TAM)
 	    	break;
         }
-	cout<<contN<<endl;
+	//cout<<contN<<endl;
     }
     else
 	cout<<"Erro ao abrir arquivo bgg-13m-reviews.csv"<<endl;
@@ -71,6 +71,7 @@ void leitura(vector<registro>& lista, vector<string>& linha, vector<vector<strin
 	string str;
     	vector<registro>::iterator it;
 	int cont = 0;
+	file.clear();
 	file.seekg(0,ios::beg);//joga o ponteiro pro inicio do arquivo
 	getline(file, str); // pula o cabecalho
 	int i = 0;
@@ -90,6 +91,7 @@ void leitura(vector<registro>& lista, vector<string>& linha, vector<vector<strin
 	   getline(s, str, '"');//pega o comentario
 	   //cout<<str<<endl;
 	   it->setDescricao(str);//joga pro registro
+	   cout<<it->getDescricao()<<endl;
 	   cont++;
 	       	       
        }
